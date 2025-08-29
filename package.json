@@ -5,7 +5,7 @@
   "description": "Specification for survey content: Index as main register of content package.",
   "scripts": {
     "validate-schema": "test-schema",
-    "test-generate_docs": "asyncapi generate fromTemplate ./make_doc/asyncapi.yaml @asyncapi/html-template -o ./public --force-write --use-new-generator",
+    "test-generate_docs": "asyncapi generate fromTemplate ./make_doc/asyncapi.yaml @asyncapi/html-template --param config=make_doc/asyncapi.config.json -o ./public --force-write --use-new-generator",
     "generate_docs": "asyncapi generate fromTemplate ./make_doc/asyncapi.yaml @asyncapi/html-template --param config=make_doc/asyncapi.config.json -o ./public --force-write --use-new-generator && cat make_doc/add.css >> ./public/css/global.min.css"
   },
   "repository": {
