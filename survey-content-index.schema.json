@@ -14,6 +14,7 @@
       "description": "Package Version in SemVer format."
     },
     "packageName": {
+      "description": "yoyo",
       "$ref": "#/$defs/language_coded_texts"
     },
     "packageDescription": {
@@ -57,7 +58,6 @@
   "$defs": {
     "language_coded_texts": {
       "type": "array",
-      "description": "Used for storing the input of texts. This type applies also in cases when only one language is used.",
       "items": {
         "type": "object",
         "properties": {
