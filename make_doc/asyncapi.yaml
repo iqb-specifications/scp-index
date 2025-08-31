@@ -1,7 +1,7 @@
 asyncapi: 2.5.0
 info:
   title: survey-content-index
-  description: "Specification for survey content: Index as main register of content definitions."
+  description: "Survey content package: Index as main register of content package."
   license:
     name: CC0 1.0
     url: https://creativecommons.org/publicdomain/zero/1.0/
@@ -18,4 +18,4 @@ channels:
 components:
   schemas:
     survey-content-index:
-      $ref: '../survey-content-index.schema.json'
+      $ref: '../scp-index.schema.json'
