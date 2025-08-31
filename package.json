@@ -1,21 +1,21 @@
 {
-  "name": "@iqbspecs/survey-content-index",
+  "name": "@iqbspecs/scp-index",
   "author": "IQB - Institut zur Qualitätsentwicklung im Bildungswesen",
   "license": "CC0-1.0",
-  "description": "Specification for survey content: Index as main register of content package.",
+  "description": "Specification for survey content package index.",
   "scripts": {
     "validate-schema": "test-schema",
-    "test-generate_docs": "ag ./make_doc/asyncapi.yaml @asyncapi/html-template --param config=make_doc/asyncapi.config.json -o ./public --force-write",
-    "generate_docs": "ag ./make_doc/asyncapi.yaml @asyncapi/html-template --param config=make_doc/asyncapi.config.json -o ./public --force-write && cat make_doc/add.css >> ./public/css/global.min.css"
+    "async-generate": "ag ./make_doc/asyncapi.yaml @asyncapi/html-template --param config=make_doc/asyncapi.config.json -o ./public --force-write",
+    "generate_docs": "npm run async-generate && cat make_doc/add.css >> ./public/css/global.min.css"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iqb-specifications/survey-content-index.git"
+    "url": "git+https://github.com/iqb-specifications/scp-index.git"
   },
   "bugs": {
-    "url": "https://github.com/iqb-specifications/survey-content-index/issues"
+    "url": "https://github.com/iqb-specifications/scp-index/issues"
   },
-  "homepage": "https://github.com/iqb-specifications/survey-content-index#readme",
+  "homepage": "https://github.com/iqb-specifications/scp-index#readme",
   "devDependencies": {
     "@iqbspecs/validate-json": "^0.3.0",
     "@asyncapi/generator": "2.4.1",
