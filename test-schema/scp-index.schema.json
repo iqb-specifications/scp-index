@@ -400,10 +400,10 @@
       "additionalProperties": false
     },
     "scp-analysis": {
-      "$ref": "https://w3id.org/iqb/spec/scp-analysis/0.2"
+      "type": "object"
     },
     "metadata": {
-      "$ref": "https://w3id.org/iqb/spec/metadata-values/3.0"
+      "type": "object"
     }
   }
 }

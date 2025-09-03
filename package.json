@@ -4,7 +4,7 @@
   "license": "CC0-1.0",
   "description": "Specification for survey content package index.",
   "scripts": {
-    "validate-schema": "test-schema",
+    "validate-schema": "test-schema test test-schema/scp-index.schema.json",
     "async_generate": "ag ./make_doc/asyncapi.yaml @asyncapi/html-template --param config=make_doc/asyncapi.config.json -o ./public --force-write",
     "generate_docs": "npm run async_generate && cat make_doc/add.css >> ./public/css/global.min.css"
   },
