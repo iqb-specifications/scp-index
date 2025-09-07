@@ -47,6 +47,56 @@
     "metadata": {
       "$ref": "#/$defs/metadata"
     },
+    "codingParameters": {
+      "description": "Some parameters for coding and analysis in general",
+      "type": "object",
+      "properties": {
+        "statusMapping": {
+          "description": "Rules how to translate response status into item value",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "itemValue": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "UNSET",
+                    "NOT_REACHED",
+                    "DISPLAYED",
+                    "VALUE_CHANGED",
+                    "DERIVE_ERROR",
+                    "NO_CODING",
+                    "INVALID",
+                    "CODING_INCOMPLETE",
+                    "CODING_ERROR",
+                    "PARTLY_DISPLAYED",
+                    "DERIVE_PENDING",
+                    "INTENDED_INCOMPLETE",
+                    "CODE_SELECTION_PENDING"
+                  ]
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "itemValue",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "minItemsPercent": {
+          "description": "Minimum number of items in responses for a scale to be reported (percent)",
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
     "surveyParts": {
       "description": "Groups of instruments, administrated the same way or at the same time.",
       "type": "array",
