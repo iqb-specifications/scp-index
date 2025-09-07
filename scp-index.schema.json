@@ -401,6 +401,70 @@
       ],
       "additionalProperties": false
     },
+    "item": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Identifier used in all other definitions of this document",
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/languageTaggedText"
+        },
+        "sources": {
+          "description": "This item will get its value from various sources throughout the survey",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "moduleId": {
+                "description": "Refers to the module used by an instrument of the surveyPart",
+                "type": "string"
+              },
+              "unitId": {
+                "description": "Refers to the unit data (UI definition, coding scheme, metadata etc.)",
+                "type": "string"
+              },
+              "unitAlias": {
+                "description": "Refers to the unit id used in response data",
+                "type": "string"
+              },
+              "sourceVariable": {
+                "description": "Refers to the variable providing its score as item value",
+                "type": "string"
+              }
+            },
+            "required": [
+              "moduleId",
+              "unitId",
+              "sourceVariable"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "sources"
+      ],
+      "additionalProperties": false
+    },
+    "methodParametersRatio": {
+      "description": "Parameters for the processing method RATIO.",
+      "type": "object",
+      "properties": {
+        "maxValue": {
+          "description": "If methodParameters is not given, the number of items will be taken as maxValue",
+          "type": "number"
+        }
+      },
+      "required": [
+        "maxValue"
+      ],
+      "additionalProperties": false
+    },
     "surveyPart": {
       "type": "object",
       "properties": {
@@ -433,24 +497,184 @@
           },
           "minItems": 1
         },
-        "analysis": {
-          "description": "Definitions on how to proceed the survey outcome.",
+        "items": {
+          "description": "Definition of all items from all modules.",
           "type": "array",
           "items": {
-            "$ref": "#/$defs/scp-analysis"
+            "$ref": "#/$defs/item"
           },
           "minItems": 1
+        },
+        "itemScales": {
+          "description": "Scales based directly on item values, providing one numeric value per test taker",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Identifier referred by other scales and survey output.",
+                "type": "string"
+              },
+              "name": {
+                "$ref": "#/$defs/languageTaggedText"
+              },
+              "description": {
+                "$ref": "#/$defs/languageTaggedText"
+              },
+              "method": {
+                "description": "Way how to process the item values.",
+                "type": "string",
+                "enum": [
+                  "SUM",
+                  "RATIO",
+                  "MEAN",
+                  "MEDIAN"
+                ]
+              },
+              "methodParameters": {
+                "description": "Depending on the method, different parameters specify the processing.",
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/methodParametersRatio"
+                  }
+                ]
+              },
+              "items": {
+                "description": "List of all items providing it's value to this specific scale",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "itemId": {
+                      "description": "This parameter refers to one entry of the surveyPart item list.",
+                      "type": "string"
+                    },
+                    "weight": {
+                      "description": "Modifies the item value before processing - works as a multiplier.",
+                      "type": "number",
+                      "default": 1
+                    }
+                  },
+                  "required": [
+                    "itemId"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "method",
+              "items"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "derivedScales": {
+          "description": "Scales based on other scale's value, providing one alphanumeric value per test taker",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Identifier referred by other scales and survey output.",
+                "type": "string"
+              },
+              "name": {
+                "$ref": "#/$defs/languageTaggedText"
+              },
+              "description": {
+                "$ref": "#/$defs/languageTaggedText"
+              },
+              "source": {
+                "description": "Id of the scale providing the value for this derived scale",
+                "type": "string"
+              },
+              "preProcessing": {
+                "description": "Modifies the value before mapping.",
+                "type": "string",
+                "enum": [
+                  "TO_LOWER_CASE",
+                  "ROUND_TO_INTEGER"
+                ]
+              },
+              "mappings": {
+                "description": "Applies the method to the value. The first match will go.",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "method": {
+                      "type": "string",
+                      "description": "Condition for evaluation",
+                      "enum": [
+                        "MATCH",
+                        "MATCH_REGEX",
+                        "LESS_THAN",
+                        "MORE_THAN",
+                        "MAX",
+                        "MIN"
+                      ]
+                    },
+                    "parameters": {
+                      "type": "array",
+                      "description": "Depending on the method, additional parameter(s) is needed.",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    },
+                    "newValue": {
+                      "description": "Value as outcome of this scale",
+                      "type": "string"
+                    },
+                    "valueLabel": {
+                      "$ref": "#/$defs/languageTaggedText"
+                    },
+                    "valueDescription": {
+                      "$ref": "#/$defs/languageTaggedText"
+                    }
+                  },
+                  "required": [
+                    "method",
+                    "parameters",
+                    "newValue"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "elseValue": {
+                "description": "Value if no mapping matches",
+                "type": "string",
+                "default": "0"
+              },
+              "elseValueLabel": {
+                "$ref": "#/$defs/languageTaggedText"
+              },
+              "elseValueDescription": {
+                "$ref": "#/$defs/languageTaggedText"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "source",
+              "mappings"
+            ],
+            "additionalProperties": false
+          }
         }
       },
       "required": [
         "id",
         "name",
-        "instruments"
+        "instruments",
+        "items"
       ],
       "additionalProperties": false
-    },
-    "scp-analysis": {
-      "$ref": "https://w3id.org/iqb/spec/scp-analysis/0.2"
     },
     "metadata": {
       "$ref": "https://w3id.org/iqb/spec/metadata-values/3.0"
