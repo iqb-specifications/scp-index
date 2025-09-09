@@ -656,6 +656,47 @@
               },
               "elseValueDescription": {
                 "$ref": "#/$defs/languageTaggedText"
+              },
+              "relatedVocabularies": {
+                "description": "Refers to public vocabularies to map the proficiency level to well known concepts",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "description": "URL to access the related vocabulary",
+                      "type": "string"
+                    },
+                    "name": {
+                      "description": "Shorthand title or name to understand the relation quickly",
+                      "type": "string"
+                    },
+                    "values": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string"
+                          },
+                          "relationShip": {
+                            "type": "string",
+                            "enum": [
+                              "SAME_AS",
+                              "ALIKE"
+                            ],
+                            "default": "SAME_AS"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                }
               }
             },
             "required": [

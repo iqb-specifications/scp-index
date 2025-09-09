@@ -676,6 +676,26 @@
               "lang": "de",
               "value": "Stufe C2"
             }
+          ],
+          "relatedVocabularies": [
+            {
+              "url": "https://w3id.org/iqb/v10/a1/",
+              "name": "Kompetenzstufenmodell Mathematik Sek 1",
+              "values": [
+                {
+                  "value": "1",
+                  "url": "https://w3id.org/iqb/v10/a1/f3q"
+                },
+                {
+                  "value": "2",
+                  "url": "https://w3id.org/iqb/v10/a1/v9q"
+                },
+                {
+                  "value": "3",
+                  "url": "https://w3id.org/iqb/v10/a1/r5c"
+                }
+              ]
+            }
           ]
         }
       ]
