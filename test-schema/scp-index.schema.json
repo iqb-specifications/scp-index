@@ -48,54 +48,7 @@
       "$ref": "#/$defs/metadata"
     },
     "codingParameters": {
-      "description": "Some parameters for coding and analysis in general",
-      "type": "object",
-      "properties": {
-        "statusMapping": {
-          "description": "Rules how to translate response status into item value",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "itemValue": {
-                "type": "integer"
-              },
-              "status": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "enum": [
-                    "UNSET",
-                    "NOT_REACHED",
-                    "DISPLAYED",
-                    "VALUE_CHANGED",
-                    "DERIVE_ERROR",
-                    "NO_CODING",
-                    "INVALID",
-                    "CODING_INCOMPLETE",
-                    "CODING_ERROR",
-                    "PARTLY_DISPLAYED",
-                    "DERIVE_PENDING",
-                    "INTENDED_INCOMPLETE",
-                    "CODE_SELECTION_PENDING"
-                  ]
-                },
-                "minItems": 1
-              }
-            },
-            "required": [
-              "itemValue",
-              "status"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "minItemsPercent": {
-          "description": "Minimum number of items in responses for a scale to be reported (percent)",
-          "type": "number"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/$defs/codingParameters"
     },
     "surveyParts": {
       "description": "Groups of instruments, administrated the same way or at the same time.",
@@ -432,6 +385,16 @@
               "sourceVariable": {
                 "description": "Refers to the variable providing its score as item value",
                 "type": "string"
+              },
+              "fullCreditValue": {
+                "description": "Score of source variable representing full credit",
+                "type": "integer",
+                "default": 1
+              },
+              "noCreditValue": {
+                "description": "Score of source variable representing no credit",
+                "type": "integer",
+                "default": 0
               }
             },
             "required": [
@@ -462,6 +425,266 @@
       },
       "required": [
         "maxValue"
+      ],
+      "additionalProperties": false
+    },
+    "codingParameters": {
+      "description": "Some parameters for coding and analysis in general",
+      "type": "object",
+      "properties": {
+        "itemValueFullCredit": {
+          "description": "Value of item representing full credit",
+          "type": "integer",
+          "default": 1
+        },
+        "itemValueNoCredit": {
+          "description": "Value of item representing no credit",
+          "type": "integer",
+          "default": 0
+        },
+        "itemValueMissing": {
+          "description": "Value of item representing missing",
+          "type": "integer",
+          "default": -99
+        },
+        "statusMapping": {
+          "description": "Rules how to translate response status into item value",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "itemValue": {
+                "type": "string",
+                "enum": [
+                  "FULL_CREDIT",
+                  "NO_CREDIT",
+                  "MISSING"
+                ]
+              },
+              "status": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "UNSET",
+                    "NOT_REACHED",
+                    "DISPLAYED",
+                    "VALUE_CHANGED",
+                    "DERIVE_ERROR",
+                    "NO_CODING",
+                    "INVALID",
+                    "CODING_INCOMPLETE",
+                    "CODING_ERROR",
+                    "PARTLY_DISPLAYED",
+                    "DERIVE_PENDING",
+                    "INTENDED_INCOMPLETE",
+                    "CODE_SELECTION_PENDING"
+                  ]
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "itemValue",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "minItemsPercent": {
+          "description": "Minimum number of items in responses for a scale to be reported (percent)",
+          "type": "number",
+          "default": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "baseScale": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Identifier referred by other scales and survey output.",
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/languageTaggedText"
+        },
+        "description": {
+          "$ref": "#/$defs/languageTaggedText"
+        },
+        "method": {
+          "description": "Way how to process the item values.",
+          "type": "string",
+          "enum": [
+            "SUM",
+            "RATIO",
+            "MEAN",
+            "MEDIAN"
+          ]
+        },
+        "methodParameters": {
+          "description": "Depending on the method, different parameters specify the processing.",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/methodParametersRatio"
+            }
+          ]
+        },
+        "items": {
+          "description": "List of all items providing it's value to this specific scale",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "itemId": {
+                "description": "This parameter refers to one entry of the surveyPart item list.",
+                "type": "string"
+              },
+              "weight": {
+                "description": "Modifies the item value before processing - works as a multiplier.",
+                "type": "number",
+                "default": 1
+              }
+            },
+            "required": [
+              "itemId"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "method",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "derivedScale": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Identifier referred by other scales and survey output.",
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/$defs/languageTaggedText"
+        },
+        "description": {
+          "$ref": "#/$defs/languageTaggedText"
+        },
+        "source": {
+          "description": "Id of the scale providing the value for this derived scale.",
+          "type": "string"
+        },
+        "mappings": {
+          "description": "Applies the method to the value. The first match will go.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "string",
+                "description": "Condition for evaluation",
+                "enum": [
+                  "EQUALS",
+                  "LESS_THAN",
+                  "MORE_THAN",
+                  "MAX",
+                  "MIN"
+                ]
+              },
+              "parameters": {
+                "type": "array",
+                "description": "Depending on the method, additional parameter(s) is needed.",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "newValue": {
+                "description": "Value as outcome of this scale",
+                "type": "number"
+              },
+              "valueLabel": {
+                "$ref": "#/$defs/languageTaggedText"
+              },
+              "valueDescription": {
+                "$ref": "#/$defs/languageTaggedText"
+              }
+            },
+            "required": [
+              "method",
+              "parameters",
+              "newValue"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "elseValue": {
+          "description": "Value if no mapping matches",
+          "type": "number",
+          "default": 0
+        },
+        "elseValueLabel": {
+          "$ref": "#/$defs/languageTaggedText"
+        },
+        "elseValueDescription": {
+          "$ref": "#/$defs/languageTaggedText"
+        },
+        "relatedVocabularies": {
+          "description": "Refers to public vocabularies to map the proficiency level to well known concepts",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "description": "URL to access the related vocabulary",
+                "type": "string"
+              },
+              "name": {
+                "description": "Shorthand title or name to understand the relation quickly",
+                "type": "string"
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "relationShip": {
+                      "type": "string",
+                      "enum": [
+                        "SAME_AS",
+                        "ALIKE"
+                      ],
+                      "default": "SAME_AS"
+                    }
+                  },
+                  "required": ["value","url"],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              }
+            },
+            "required": ["values","url"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "source",
+        "mappings"
       ],
       "additionalProperties": false
     },
@@ -505,207 +728,18 @@
           },
           "minItems": 1
         },
-        "itemScales": {
-          "description": "Scales based directly on item values, providing one numeric value per test taker",
+        "baseScales": {
+          "description": "Scales based directly on item values, providing one value per test taker",
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identifier referred by other scales and survey output.",
-                "type": "string"
-              },
-              "name": {
-                "$ref": "#/$defs/languageTaggedText"
-              },
-              "description": {
-                "$ref": "#/$defs/languageTaggedText"
-              },
-              "method": {
-                "description": "Way how to process the item values.",
-                "type": "string",
-                "enum": [
-                  "SUM",
-                  "RATIO",
-                  "MEAN",
-                  "MEDIAN"
-                ]
-              },
-              "methodParameters": {
-                "description": "Depending on the method, different parameters specify the processing.",
-                "oneOf": [
-                  {
-                    "$ref": "#/$defs/methodParametersRatio"
-                  }
-                ]
-              },
-              "items": {
-                "description": "List of all items providing it's value to this specific scale",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "itemId": {
-                      "description": "This parameter refers to one entry of the surveyPart item list.",
-                      "type": "string"
-                    },
-                    "weight": {
-                      "description": "Modifies the item value before processing - works as a multiplier.",
-                      "type": "number",
-                      "default": 1
-                    }
-                  },
-                  "required": [
-                    "itemId"
-                  ],
-                  "additionalProperties": false
-                },
-                "minItems": 1
-              }
-            },
-            "required": [
-              "id",
-              "name",
-              "method",
-              "items"
-            ],
-            "additionalProperties": false
+            "$ref": "#/$defs/baseScale"
           }
         },
         "derivedScales": {
-          "description": "Scales based on other scale's value, providing one alphanumeric value per test taker",
+          "description": "Scales based on other scale's value, providing one value per test taker",
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identifier referred by other scales and survey output.",
-                "type": "string"
-              },
-              "name": {
-                "$ref": "#/$defs/languageTaggedText"
-              },
-              "description": {
-                "$ref": "#/$defs/languageTaggedText"
-              },
-              "source": {
-                "description": "Id of the scale providing the value for this derived scale",
-                "type": "string"
-              },
-              "preProcessing": {
-                "description": "Modifies the value before mapping.",
-                "type": "string",
-                "enum": [
-                  "TO_LOWER_CASE",
-                  "ROUND_TO_INTEGER"
-                ]
-              },
-              "mappings": {
-                "description": "Applies the method to the value. The first match will go.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "method": {
-                      "type": "string",
-                      "description": "Condition for evaluation",
-                      "enum": [
-                        "MATCH",
-                        "MATCH_REGEX",
-                        "LESS_THAN",
-                        "MORE_THAN",
-                        "MAX",
-                        "MIN"
-                      ]
-                    },
-                    "parameters": {
-                      "type": "array",
-                      "description": "Depending on the method, additional parameter(s) is needed.",
-                      "items": {
-                        "type": "string"
-                      },
-                      "minItems": 1
-                    },
-                    "newValue": {
-                      "description": "Value as outcome of this scale",
-                      "type": "string"
-                    },
-                    "valueLabel": {
-                      "$ref": "#/$defs/languageTaggedText"
-                    },
-                    "valueDescription": {
-                      "$ref": "#/$defs/languageTaggedText"
-                    }
-                  },
-                  "required": [
-                    "method",
-                    "parameters",
-                    "newValue"
-                  ],
-                  "additionalProperties": false
-                },
-                "minItems": 1
-              },
-              "elseValue": {
-                "description": "Value if no mapping matches",
-                "type": "string",
-                "default": "0"
-              },
-              "elseValueLabel": {
-                "$ref": "#/$defs/languageTaggedText"
-              },
-              "elseValueDescription": {
-                "$ref": "#/$defs/languageTaggedText"
-              },
-              "relatedVocabularies": {
-                "description": "Refers to public vocabularies to map the proficiency level to well known concepts",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "url": {
-                      "description": "URL to access the related vocabulary",
-                      "type": "string"
-                    },
-                    "name": {
-                      "description": "Shorthand title or name to understand the relation quickly",
-                      "type": "string"
-                    },
-                    "values": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "type": "string"
-                          },
-                          "url": {
-                            "type": "string"
-                          },
-                          "relationShip": {
-                            "type": "string",
-                            "enum": [
-                              "SAME_AS",
-                              "ALIKE"
-                            ],
-                            "default": "SAME_AS"
-                          }
-                        },
-                        "additionalProperties": false
-                      }
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              }
-            },
-            "required": [
-              "id",
-              "name",
-              "source",
-              "mappings"
-            ],
-            "additionalProperties": false
+            "$ref": "#/$defs/derivedScale"
           }
         }
       },
