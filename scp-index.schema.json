@@ -314,38 +314,6 @@
             "additionalProperties": false
           },
           "minItems": 1
-        },
-        "handOutsForTestProctor": {
-          "description": "All documents must be presented to the test proctor (online or print-out).",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "order": {
-                "description": "Default sorting is alpha-numeric.",
-                "type": "integer",
-                "minimum": 0,
-                "default": 0
-              },
-              "asPrintOut": {
-                "type": "boolean",
-                "default": false
-              },
-              "file": {
-                "description": "All language variants of the same hand-out",
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/languageTaggedObjectRef"
-                },
-                "minItems": 1
-              }
-            },
-            "required": [
-              "file"
-            ],
-            "additionalProperties": false
-          },
-          "minItems": 1
         }
       },
       "required": [
@@ -371,7 +339,7 @@
             "type": "object",
             "properties": {
               "moduleId": {
-                "description": "Refers to the module used by an instrument of the surveyPart",
+                "description": "Refers to the module used by an instrument of the surveyPart. If no moduleId is given, all modules will searched for the unit.",
                 "type": "string"
               },
               "unitId": {
@@ -385,26 +353,25 @@
               "sourceVariable": {
                 "description": "Refers to the variable providing its score as item value",
                 "type": "string"
-              },
-              "fullCreditValue": {
-                "description": "Score of source variable representing full credit",
-                "type": "integer",
-                "default": 1
-              },
-              "noCreditValue": {
-                "description": "Score of source variable representing no credit",
-                "type": "integer",
-                "default": 0
               }
             },
             "required": [
-              "moduleId",
               "unitId",
               "sourceVariable"
             ],
             "additionalProperties": false
           },
           "minItems": 1
+        },
+        "fullCreditValue": {
+          "description": "Score of source variable representing full credit",
+          "type": "integer",
+          "default": 1
+        },
+        "noCreditValue": {
+          "description": "Score of source variable representing no credit",
+          "type": "integer",
+          "default": 0
         }
       },
       "required": [
@@ -534,22 +501,7 @@
           "description": "List of all items providing it's value to this specific scale",
           "type": "array",
           "items": {
-            "type": "object",
-            "properties": {
-              "itemId": {
-                "description": "This parameter refers to one entry of the surveyPart item list.",
-                "type": "string"
-              },
-              "weight": {
-                "description": "Modifies the item value before processing - works as a multiplier.",
-                "type": "number",
-                "default": 1
-              }
-            },
-            "required": [
-              "itemId"
-            ],
-            "additionalProperties": false
+            "type": "string"
           },
           "minItems": 1
         }
@@ -669,13 +621,19 @@
                       "default": "SAME_AS"
                     }
                   },
-                  "required": ["value","url"],
+                  "required": [
+                    "value",
+                    "url"
+                  ],
                   "additionalProperties": false
                 },
                 "minItems": 1
               }
             },
-            "required": ["values","url"],
+            "required": [
+              "values",
+              "url"
+            ],
             "additionalProperties": false
           }
         }
@@ -741,6 +699,47 @@
           "items": {
             "$ref": "#/$defs/derivedScale"
           }
+        },
+        "supportingDocuments": {
+          "description": "Additional documents supporting the assessment",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "contentType": {
+                "type": "string",
+                "enum": [
+                  "CODING_INSTRUCTIONS",
+                  "STUDY_BACKGROUND"
+                ]
+              },
+              "targeting": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "PROCTOR",
+                    "TEST_TAKER",
+                    "TEACHER",
+                    "TEST_ADMINISTRATION",
+                    "GOVERNANCE",
+                    "CODER"
+                  ]
+                },
+                "minItems": 1
+              },
+              "file": {
+                "$ref": "#/$defs/languageTaggedObjectRef"
+              }
+            },
+            "required": [
+              "file",
+              "targeting",
+              "contentType"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
         }
       },
       "required": [

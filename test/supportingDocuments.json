@@ -1,0 +1,99 @@
+{
+  "packageId": "IQB.VERA2027",
+  "version": "1.2.15",
+  "name": [
+    {
+      "lang": "de",
+      "value": "IQB VERA Vergleichsarbeiten Durchgang 2027"
+    }
+  ],
+  "description": [
+    {
+      "lang": "de",
+      "value": "Sämtliche Daten und Dokumente für die Online-Durchführung und Auswertung des Durchganges 2027 für VERA Vergleichsarbeiten Durchgang 2027"
+    }
+  ],
+  "surveyParts": [
+    {
+      "id": "1",
+      "name": [
+        {
+          "lang": "de",
+          "value": "Mathematik"
+        }
+      ],
+      "description": [
+        {
+          "lang": "de",
+          "value": "Mathematik Leitideen 1 und 3"
+        }
+      ],
+      "instruments": [
+        {
+          "id": "THM1",
+          "name": [
+            {
+              "lang": "de",
+              "value": "Mathematik Testheft Grundkurs"
+            }
+          ],
+          "testcenterBooklets": [
+            {
+              "lang": "de",
+              "definitionId": "math/booklets/ma-th1.xml",
+              "modules": [
+                {
+                  "moduleId": "MB",
+                  "order": 1
+                },
+                {
+                  "moduleId": "ME1",
+                  "order": 2
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "items": [
+        {
+          "id": "F9283a",
+          "name": [
+            {
+              "lang": "de",
+              "value": "Teilaufgabe A"
+            }
+          ],
+          "sources": [
+            {
+              "moduleId": "F4",
+              "unitId": "F9283",
+              "sourceVariable": "a3"
+            },
+            {
+              "moduleId": "F6",
+              "unitId": "F9283",
+              "unitAlias": "F9283_2",
+              "sourceVariable": "a3"
+            }
+          ]
+        }
+      ],
+      "supportingDocuments": [
+        {
+          "contentType": "CODING_INSTRUCTIONS",
+          "targeting": [
+            "CODER"
+          ],
+          "file": [
+            {
+              "id": "supplements/codebookHET667.pdf",
+              "lang": "de",
+              "label": "Codebook für Französisch Leseverstehen"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

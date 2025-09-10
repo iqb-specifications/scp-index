@@ -564,16 +564,9 @@
           ],
           "method": "SUM",
           "items": [
-            {
-              "itemId": "F9283a"
-            },
-            {
-              "itemId": "F9283b",
-              "weight": 2
-            },
-            {
-              "itemId": "F9283c"
-            }
+            "F9283a",
+            "F9283b",
+            "F9283c"
           ]
         },
         {
@@ -593,16 +586,9 @@
             "maxValue": 15
           },
           "items": [
-            {
-              "itemId": "F9283a"
-            },
-            {
-              "itemId": "F9283b",
-              "weight": 2
-            },
-            {
-              "itemId": "F9283c"
-            }
+            "F9283a",
+            "F9283b",
+            "F9283c"
           ]
         }
       ],
