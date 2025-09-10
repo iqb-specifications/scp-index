@@ -322,6 +322,14 @@
       ],
       "additionalProperties": false
     },
+    "itemValueType": {
+      "type": "string",
+      "enum": [
+        "FULL_CREDIT",
+        "NO_CREDIT",
+        "MISSING"
+      ]
+    },
     "item": {
       "type": "object",
       "properties": {
@@ -399,20 +407,20 @@
       "description": "Some parameters for coding and analysis in general",
       "type": "object",
       "properties": {
-        "itemValueFullCredit": {
-          "description": "Value of item representing full credit",
-          "type": "integer",
-          "default": 1
-        },
-        "itemValueNoCredit": {
-          "description": "Value of item representing no credit",
-          "type": "integer",
-          "default": 0
-        },
-        "itemValueMissing": {
-          "description": "Value of item representing missing",
-          "type": "integer",
-          "default": -99
+        "itemValues": {
+          "description": "Mapping logical item values to numeric values. Standards are 1-FULL_CREDIT, 0-NO_CREDIT, -99-MISSING.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "$ref": "#/$defs/itemValueType"
+              },
+              "value": {
+                "type": "integer"
+              }
+            }
+          }
         },
         "statusMapping": {
           "description": "Rules how to translate response status into item value",
@@ -420,13 +428,8 @@
           "items": {
             "type": "object",
             "properties": {
-              "itemValue": {
-                "type": "string",
-                "enum": [
-                  "FULL_CREDIT",
-                  "NO_CREDIT",
-                  "MISSING"
-                ]
+              "itemValueType": {
+                "$ref": "#/$defs/itemValueType"
               },
               "status": {
                 "type": "array",
@@ -452,7 +455,7 @@
               }
             },
             "required": [
-              "itemValue",
+              "itemValueType",
               "status"
             ],
             "additionalProperties": false
