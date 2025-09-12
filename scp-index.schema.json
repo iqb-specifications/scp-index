@@ -235,7 +235,7 @@
         "metadata": {
           "$ref": "#/$defs/metadata"
         },
-        "testcenterBooklets": {
+        "testcenterBooklet": {
           "description": "If part of TBA, this ids refer to the language specific XML definition used to run the instrument in IQB-Testcenter.",
           "type": "array",
           "items": {
@@ -283,6 +283,15 @@
             "additionalProperties": false
           }
         },
+        "administrationMode": {
+          "type": "string",
+          "enum": [
+            "TEST_BY_TEST_TAKER",
+            "TEST_BY_PROCTOR",
+            "STIMULUS_FOR_TEST_TAKER"
+          ],
+          "default": "TEST_BY_TEST_TAKER"
+        },
         "handOutsForTestTaker": {
           "description": "All documents must be presented to the test taker (online or print-out).",
           "type": "array",
@@ -295,9 +304,14 @@
                 "minimum": 0,
                 "default": 0
               },
-              "asPrintOut": {
-                "type": "boolean",
-                "default": false
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "PRINT_SHOW",
+                  "PRINT_WRITE_DRAW",
+                  "ON_SCREEN"
+                ],
+                "default": "PRINT"
               },
               "file": {
                 "description": "All language variants of the same hand-out",
@@ -318,7 +332,8 @@
       },
       "required": [
         "id",
-        "name"
+        "name",
+        "testcenterBooklet"
       ],
       "additionalProperties": false
     },

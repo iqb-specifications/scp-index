@@ -37,7 +37,7 @@
               "value": "Mathematik Testheft Grundkurs"
             }
           ],
-          "testcenterBooklets": [
+          "testcenterBooklet": [
             {
               "lang": "de",
               "definitionId": "math/booklets/ma-th1.xml",
