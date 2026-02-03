@@ -1,4 +1,6 @@
-asyncapi: 2.5.0
+asyncapi: 3.0.0
+id: "urn:iqb-specifications:acp-index"
+defaultContentType: application/json
 info:
   title: acp-index
   description: "Specification for assessment content package index."
@@ -11,11 +13,12 @@ info:
     url: https://iqb-specifications.github.io/
 channels:
   iqb_data_structures:
-    subscribe:
-      operationId: 'Please select one schema'
-      message:
-        messageId: select_schema
+    address: iqb_data_structures
+    messages:
+      select_schema:
+        payload:
+          $ref: "#/components/schemas/acp-index"
 components:
   schemas:
-    survey-content-index:
-      $ref: '../acp-index.schema.json'
+    acp-index:
+      $ref: "acp-index.schema.json"
