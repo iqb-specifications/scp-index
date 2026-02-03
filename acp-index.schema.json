@@ -1,5 +1,5 @@
 {
-  "$id": "acp-index@0.6",
+  "$id": "acp-index@0.5",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Assessment Content Package Index",
   "description": "Specification for assessment content package index.",
